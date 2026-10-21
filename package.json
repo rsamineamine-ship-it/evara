@@ -1,0 +1,33 @@
+{
+  "name": "evara",
+  "version": "0.2.0",
+  "private": true,
+  "description": "EVARA — copilote financier pour TPE/PME. Moteur métier indépendant du framework UI + application React.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/serve.mjs",
+    "e2e": "node scripts/e2e.mjs",
+    "check": "npm run typecheck && npm run test && npm run build",
+    "dev": "node scripts/build.mjs --watch & node scripts/serve.mjs",
+    "lint": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "esbuild": "^0.25.0"
+  }
+}

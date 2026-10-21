@@ -1,0 +1,13 @@
+import { writeFileSync } from "node:fs";
+import { buildDemoLedger, DEMO_ORG_ID } from "../src/demo/seed";
+import { renderDocumentPdf } from "../src/pdf/document";
+import { invoiceView } from "../src/domain/documents";
+const today = "2026-10-21";
+const { ledger } = buildDemoLedger(today);
+const inv = ledger.invoices.find(i => i.number === "FAC-2026-0012")!;
+const cust = ledger.customers.find(c => c.id === inv.customerId)!;
+const org = ledger.organizations[0]!;
+const v = invoiceView(ledger, inv, today);
+const bytes = await renderDocumentPdf({ kind: "invoice", number: inv.number, issuer: { name: org.name, legalMentions: org.legalMentions }, customer: cust, issueDate: inv.issueDate, secondaryDate: inv.dueDate, lines: inv.lines, totals: inv.totals, currency: "EUR", paymentTerms: inv.paymentTerms, notes: inv.notes, paidCents: v.paidCents, balanceCents: v.balanceCents });
+writeFileSync(process.argv[2]!, bytes);
+console.log(inv.number, bytes.length);

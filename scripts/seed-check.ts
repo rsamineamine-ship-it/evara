@@ -1,0 +1,12 @@
+import { buildDemoLedger, DEMO_ORG_ID, DEMO_USER_ID } from "../src/demo/seed";
+import { buildCtx } from "../src/domain/access";
+import { buildDashboard, buildActions } from "../src/domain/dashboard";
+import { formatMoneyPlain } from "../src/domain/money";
+const today = "2026-10-21";
+const { ledger } = buildDemoLedger(today);
+const ctx = buildCtx(ledger, DEMO_USER_ID, DEMO_ORG_ID, today, today + "T09:00:00Z");
+const dsh = buildDashboard(ledger, ctx);
+console.log("cash", formatMoneyPlain(dsh.cash.totalCents), "recv", formatMoneyPlain(dsh.receivablesCents), "overdue", formatMoneyPlain(dsh.receivablesOverdueCents), dsh.overdueInvoiceCount, "pay", formatMoneyPlain(dsh.payablesCents));
+console.log("f30", formatMoneyPlain(dsh.forecast30.endBalanceCents), formatMoneyPlain(dsh.forecast30Prudent.endBalanceCents), formatMoneyPlain(dsh.forecast30Favorable.endBalanceCents), "min", dsh.forecast30.minBalance);
+console.log(buildActions(ledger, ctx).map(a => `${a.severity} ${a.title}`).join("\n"));
+console.log(dsh.forecast30.alerts.map(a=>a.title), dsh.forecast30.excluded.map(e=>e.reason.slice(0,60)));
